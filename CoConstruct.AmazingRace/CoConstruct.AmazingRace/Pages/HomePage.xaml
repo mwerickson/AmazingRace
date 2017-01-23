@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:googleMaps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps"
+             x:Class="CoConstruct.AmazingRace.Pages.HomePage"
+             x:Name="MyHomePage"
+             Title="Amazing Race">
+  <StackLayout Orientation="Vertical">
+    <StackLayout Orientation="Horizontal">
+      <Entry x:Name="AddressEntry" Text="{Binding RawAddress}"
+             FontSize="Micro"
+             Placeholder="Enter address"
+             HorizontalOptions="FillAndExpand"/>
+      <Button Text="Add" 
+              Command="{Binding AddPitStopCommand}"
+              CommandParameter="{Binding Source={x:Reference AddressEntry}, Path=Text}"
+              HeightRequest="20" 
+              WidthRequest="80"
+              HorizontalOptions="End"/>
+    </StackLayout>
+    <StackLayout BackgroundColor="Teal" HorizontalOptions="FillAndExpand">
+      <Label Text="Pit Stops" TextColor="White" FontAttributes="Bold" HorizontalOptions="FillAndExpand"/>
+    </StackLayout>
+    <ListView ItemsSource="{Binding PitStops}" 
+              HasUnevenRows="True" 
+              HeightRequest="60"
+              SelectedItem="{Binding SelectedPitStop}"
+              ItemSelected="PitStopSelected">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.ContextActions>
+              <MenuItem Text="Delete"  
+                        IsDestructive="True"
+                        Command="{Binding Path=BindingContext.DeleteAddressCommand, Source={x:Reference Name=MyHomePage}}" 
+                        CommandParameter="{Binding .}"/>
+            </ViewCell.ContextActions>
+            <StackLayout Orientation="Vertical"
+                         Padding="10,5,10,5">
+              <Label Text="{Binding Address}"
+                     FontSize="Micro"
+                     LineBreakMode="TailTruncation"/>
+            </StackLayout>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <Button Text="Show Directions" 
+            Command="{Binding ShowDirectionsCommand}"
+            HorizontalOptions="CenterAndExpand"/>
+    <Label Text="{Binding ErrorMessage}"
+           TextColor="Red"
+           FontSize="Micro"
+           HorizontalOptions="CenterAndExpand"/>
+    <googleMaps:Map x:Name="RaceMap" 
+                    MapType="Street" 
+                    IsShowingUser="false" />
+  </StackLayout>
+</ContentPage>
